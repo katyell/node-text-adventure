@@ -75,7 +75,12 @@ describe('handleMove', () => {
   it('shows items present in a new location', () => {
     // cafe has ['coffee cup', 'book'] — locationItems must reflect this
     const state = makeState({
-      locationItems: { start: [], cafe: ['coffee cup', 'book'], street: [], 'iron gates': [] },
+      locationItems: {
+        start: [],
+        cafe: ['coffee cup', 'book'],
+        street: [],
+        'iron gates': [],
+      },
     });
     const next = handleMove(state, 'NORTH');
     const allText = next.output.map((l) => l.text).join('\n');
