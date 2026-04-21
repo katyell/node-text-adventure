@@ -19,6 +19,10 @@ export function Terminal() {
     if (el) el.scrollTop = el.scrollHeight;
   }, [state.output]);
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [state.screen]);
+
   // Keep input focused
   const refocus = () => inputRef.current?.focus();
 
@@ -41,7 +45,9 @@ export function Terminal() {
       <div className={styles.output} ref={outputRef}>
         {state.screen === 'title' && (
           <div className={styles.titleScreen}>
-            <pre className={styles.ascii}>{ASCII_TITLE}</pre>
+            <p className={styles.kicker}>A Regency time-slip mystery</p>
+            <h1 className={styles.title}>The Clockwork Cafe</h1>
+            <pre className={styles.ascii}>{TITLE_CARD}</pre>
             <p className={styles.pressEnter}>PRESS ENTER TO BEGIN</p>
           </div>
         )}
@@ -66,6 +72,8 @@ export function Terminal() {
             <input
               ref={inputRef}
               className={styles.input}
+              aria-label='Start game'
+              data-testid='start-input'
               autoFocus
               autoComplete='off'
               spellCheck={false}
@@ -79,6 +87,8 @@ export function Terminal() {
             <input
               ref={inputRef}
               className={styles.input}
+              aria-label='Command input'
+              data-testid='command-input'
               value={input}
               onChange={(e) => setInput(e.target.value)}
               autoFocus
@@ -92,17 +102,9 @@ export function Terminal() {
   );
 }
 
-const ASCII_TITLE = `
- _   _  ___  ____  _____   _____ _______  _______ _______
- \\\\  | |/ _ \\|  _ \\| ____| |_   _| ____\\ \\/ /_   _|_   _|
-  \\\\ | | | | | | | |  _|     | | |  _|  \\  /  | |   | |
-   \\\\| | |_| | |_| | |___    | | | |___ /  \\  | |   | |
-    \\__|\\___/|____/|_____|   |_| |_____/_/\\_\\ |_|   |_|
-
-     _  ______  _   _ _______ _    _  ____  ____
-    /\\  |  _  \\| | | |  ____|| |  | |/ __ \\|  _ \\
-   /  \\ | | | | | | | |__   | |  | | |  | | |_) |
-  / /\\ \\| | | | | | |  __|  | |  | | |  | |  _ <
- / /  \\ \\ |_| \\ \\_/ / |____ | |__| | |__| | |_) |
-/_/    \\_\\_____/\\___/|______||_____/ \\____/|____/
+const TITLE_CARD = `
+┌────────────────────────┐
+│ THE CLOCKWORK CAFE     │
+│ LONDON, 1815           │
+└────────────────────────┘
 `;

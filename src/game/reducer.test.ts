@@ -34,6 +34,9 @@ describe('START_GAME', () => {
   it('appends location description after intro', () => {
     const state = gameReducer(createInitialState(), { type: 'START_GAME' });
     const allText = state.output.map((l) => l.text).join('\n');
+    expect(allText).toMatch(
+      /the café is to the north; the iron gates lie to the south/i
+    );
     expect(allText).toMatch(/Exits:/i);
   });
 });
