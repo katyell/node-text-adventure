@@ -19,14 +19,16 @@ export function handleMove(state: GameState, direction: string): GameState {
   const lockFlag = loc.lockedExits?.[direction];
   if (lockFlag && !state.flags[lockFlag]) {
     const targetLoc = locations[target];
-    return append(
-      state,
-      `The way to ${targetLoc.name} is blocked. You need to find another way through.`
-    );
+    const lockedMessage =
+      loc.lockedMessages?.[direction] ??
+      `The way to ${targetLoc.name} is blocked. You need to find another way through.`;
+    return append(state, lockedMessage);
   }
 
   const newVisited = { ...state.visited, [target]: true };
-  const lines = locationLines({ ...state, visited: newVisited }, target);
+  // Use the pre-move visited state so locationLines correctly shows the long
+  // description on first arrival (target not yet in state.visited).
+  const lines = locationLines(state, target);
   return append({ ...state, location: target, visited: newVisited }, ...lines);
 }
 

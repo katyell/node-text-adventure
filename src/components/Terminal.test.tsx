@@ -33,11 +33,8 @@ describe('Terminal start flow', () => {
         /you appear to be lying face-down on a busy cobbled street/i
       )
     ).toBeTruthy();
-    expect(
-      screen.getByText(
-        /the café is to the north; the iron gates lie to the south/i
-      )
-    ).toBeTruthy();
+    // After the intro the full (long) location description is shown
+    expect(screen.getByText(/--- cobbled street ---/i)).toBeTruthy();
     expect(screen.getByText(/exits:/i)).toBeTruthy();
 
     const commandInput = screen.getByTestId('command-input');

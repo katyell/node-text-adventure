@@ -4,7 +4,7 @@ export const locations: Record<string, LocationDefinition> = {
   start: {
     name: 'Cobbled Street',
     description:
-      'You are lying face-down on a busy cobbled street. People bustle past without a second glance — perhaps dishevelled strangers are common here. Your head is groggy. The street runs east to west. To the north is a café, and to the south you can see a pair of large iron gates.',
+      'A busy cobbled street runs east to west. People bustle past without a second glance — perhaps dishevelled strangers are common here. To the north is a café, and to the south you can see a pair of large iron gates.',
     shortDescription:
       'You are back on the cobbled street. The café is to the north; the iron gates lie to the south.',
     exits: {
@@ -13,7 +13,11 @@ export const locations: Record<string, LocationDefinition> = {
       SOUTH: 'iron gates',
       WEST: 'street',
     },
-    lockedExits: {},
+    lockedExits: { SOUTH: 'gatesUnlocked' },
+    lockedMessages: {
+      SOUTH:
+        "The iron gates are firmly locked. You'll need to find a way to open them before you can pass.",
+    },
     items: [],
     npcs: [],
   },

@@ -34,9 +34,8 @@ describe('START_GAME', () => {
   it('appends location description after intro', () => {
     const state = gameReducer(createInitialState(), { type: 'START_GAME' });
     const allText = state.output.map((l) => l.text).join('\n');
-    expect(allText).toMatch(
-      /the café is to the north; the iron gates lie to the south/i
-    );
+    // The full (long) description is shown on game start regardless of visit flag
+    expect(allText).toMatch(/--- COBBLED STREET ---/i);
     expect(allText).toMatch(/Exits:/i);
   });
 });
@@ -72,6 +71,27 @@ describe('COMMAND — movement', () => {
     const state = runCommands(['NORTH', 'NORTH']);
     expect(lastOutput(state)).toMatch(/can't go that way/i);
     expect(state.location).toBe('cafe');
+  });
+
+  it('all direction shorthands work at reducer level', () => {
+    // N goes to cafe, S returns to start
+    expect(runCommands(['N']).location).toBe('cafe');
+    expect(runCommands(['N', 'S']).location).toBe('start');
+    expect(runCommands(['E']).location).toBe('street');
+    expect(runCommands(['W']).location).toBe('street');
+  });
+
+  it('UP and DOWN say "can\'t go that way" (no such exits exist)', () => {
+    expect(lastOutput(runCommands(['UP']))).toMatch(/can't go that way/i);
+    expect(lastOutput(runCommands(['DOWN']))).toMatch(/can't go that way/i);
+    expect(lastOutput(runCommands(['U']))).toMatch(/can't go that way/i);
+    expect(lastOutput(runCommands(['D']))).toMatch(/can't go that way/i);
+  });
+
+  it('locked iron gates block movement south without the flag', () => {
+    const state = runCommands(['SOUTH']);
+    expect(state.location).toBe('start');
+    expect(lastOutput(state)).toMatch(/iron gates are firmly locked/i);
   });
 });
 

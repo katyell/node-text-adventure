@@ -22,7 +22,9 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case 'START_GAME': {
       const visited = { start: true };
-      const locLines = locationLines({ ...state, visited }, 'start');
+      // forceLong=true so the full location description always prints on game
+      // start, regardless of the visited flag being set simultaneously.
+      const locLines = locationLines(state, 'start', true);
       const started = {
         ...state,
         screen: 'game' as const,

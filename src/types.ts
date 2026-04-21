@@ -87,6 +87,8 @@ export type LocationDefinition = {
   exits: Record<string, string>;
   /** Direction → flag name required to pass */
   lockedExits: Record<string, string>;
+  /** Direction → custom message shown when the exit is locked (falls back to generic) */
+  lockedMessages?: Record<string, string>;
   /** Item ids present at game start */
   items: string[];
   /** NPC ids present in this location */

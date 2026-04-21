@@ -42,14 +42,28 @@ describe('handleMove', () => {
   });
 
   it('blocks a locked exit when its flag is not set', () => {
-    // Inject a lockedExits entry into the locations data via module — instead
-    // we test the branch by monkeypatching the imported module for this test
-    // The real locked-exit path is covered in the reducer integration tests.
-    // Here we verify that a missing exit is still rejected cleanly.
-    const state = makeState({ location: 'iron gates' });
-    const next = handleMove(state, 'SOUTH'); // iron gates has no SOUTH exit
+    // start → SOUTH (iron gates) requires flag 'gatesUnlocked'
+    const state = makeState({ location: 'start', flags: {} });
+    const next = handleMove(state, 'SOUTH');
+    expect(next.location).toBe('start'); // did not move
+    expect(next.output.at(-1)!.text).toMatch(/iron gates are firmly locked/i);
+  });
+
+  it('passes through a locked exit when the required flag is set', () => {
+    const state = makeState({ location: 'start', flags: { gatesUnlocked: true } });
+    const next = handleMove(state, 'SOUTH');
     expect(next.location).toBe('iron gates');
-    expect(next.output.at(-1)!.text).toMatch(/can't go that way/i);
+  });
+
+  it('shows items present in a new location', () => {
+    // cafe has ['coffee cup', 'book'] — locationItems must reflect this
+    const state = makeState({
+      locationItems: { start: [], cafe: ['coffee cup', 'book'], street: [], 'iron gates': [] },
+    });
+    const next = handleMove(state, 'NORTH');
+    const allText = next.output.map((l) => l.text).join('\n');
+    expect(allText).toMatch(/coffee cup/);
+    expect(allText).toMatch(/book/);
   });
 
   it('does not mutate the original state', () => {
