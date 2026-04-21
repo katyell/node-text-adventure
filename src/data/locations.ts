@@ -11,13 +11,9 @@ export const locations: Record<string, LocationDefinition> = {
       NORTH: 'cafe',
       EAST: 'street',
       SOUTH: 'iron gates',
-      WEST: 'street',
+      WEST: 'west street',
     },
-    lockedExits: { SOUTH: 'gatesUnlocked' },
-    lockedMessages: {
-      SOUTH:
-        "The iron gates are firmly locked. You'll need to find a way to open them before you can pass.",
-    },
+    lockedExits: {},
     items: [],
     npcs: [],
   },
@@ -33,11 +29,23 @@ export const locations: Record<string, LocationDefinition> = {
     npcs: [],
   },
   street: {
-    name: 'Busy Street',
+    name: 'East Street',
     description:
-      'You are on a busy street. People are hurrying about, not making eye contact. The street continues both east and west, looping back to where you started.',
-    shortDescription: 'You are back on the busy street. People hurry past.',
-    exits: { WEST: 'start', EAST: 'start' },
+      'You are on the eastern stretch of the street. Shopfront windows throw soft reflections across the cobbles. The main crossing is back to the west.',
+    shortDescription:
+      'You are back on East Street. The crossing is west from here.',
+    exits: { WEST: 'start' },
+    lockedExits: {},
+    items: [],
+    npcs: [],
+  },
+  'west street': {
+    name: 'West Street',
+    description:
+      'You are on the western stretch of the street. A row of shuttered buildings leans over the pavement. The crossing is back to the east.',
+    shortDescription:
+      'You are back on West Street. The crossing is east from here.',
+    exits: { EAST: 'start' },
     lockedExits: {},
     items: [],
     npcs: [],
@@ -45,9 +53,35 @@ export const locations: Record<string, LocationDefinition> = {
   'iron gates': {
     name: 'Iron Gates',
     description:
-      'You are standing before a pair of large iron gates. They look old and rusty and are firmly locked. Beyond them stretches a wide expanse of grass. The street is back to the north.',
-    shortDescription: 'The iron gates loom before you, still locked.',
-    exits: { NORTH: 'start' },
+      'You are standing before a pair of large iron gates. Beyond them stretches a wide expanse of grass, but the way south is blocked by a heavy lock. The street is back to the north, and a narrow path runs east.',
+    shortDescription:
+      'You are back at the iron gates. North leads to the street; east follows a narrow path.',
+    exits: { NORTH: 'start', EAST: 'south path', SOUTH: 'meadow' },
+    lockedExits: { SOUTH: 'gatesUnlocked' },
+    lockedMessages: {
+      SOUTH:
+        "The iron gates are firmly locked. You'll need to find a way to open them before you can pass.",
+    },
+    items: [],
+    npcs: [],
+  },
+  'south path': {
+    name: 'South Path',
+    description:
+      'A narrow gravel path hugs the outside wall near the gates. It feels quieter here, away from the crowds.',
+    shortDescription:
+      'You are on the narrow path beside the iron gates.',
+    exits: { WEST: 'iron gates' },
+    lockedExits: {},
+    items: [],
+    npcs: [],
+  },
+  meadow: {
+    name: 'Meadow',
+    description:
+      'You step into a broad meadow of wind-brushed grass. The city noise fades behind you.',
+    shortDescription: 'You are back in the meadow beyond the gates.',
+    exits: { NORTH: 'iron gates' },
     lockedExits: {},
     items: [],
     npcs: [],

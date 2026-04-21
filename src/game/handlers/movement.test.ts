@@ -8,7 +8,14 @@ const makeState = (overrides = {}) => ({
   visited: {},
   flags: {},
   output: [],
-  locationItems: { start: [], cafe: [], street: [], 'iron gates': [] },
+  locationItems: {
+    start: [],
+    cafe: [],
+    street: [],
+    'iron gates': [],
+    'south path': [],
+    meadow: [],
+  },
   inventory: [],
   wearing: [],
   awaitingConfirm: null,
@@ -42,17 +49,27 @@ describe('handleMove', () => {
   });
 
   it('blocks a locked exit when its flag is not set', () => {
-    // start → SOUTH (iron gates) requires flag 'gatesUnlocked'
-    const state = makeState({ location: 'start', flags: {} });
+    // iron gates → SOUTH (meadow) requires flag 'gatesUnlocked'
+    const state = makeState({ location: 'iron gates', flags: {} });
     const next = handleMove(state, 'SOUTH');
-    expect(next.location).toBe('start'); // did not move
+    expect(next.location).toBe('iron gates'); // did not move
     expect(next.output.at(-1)!.text).toMatch(/iron gates are firmly locked/i);
   });
 
   it('passes through a locked exit when the required flag is set', () => {
-    const state = makeState({ location: 'start', flags: { gatesUnlocked: true } });
+    const state = makeState({
+      location: 'iron gates',
+      flags: { gatesUnlocked: true },
+    });
     const next = handleMove(state, 'SOUTH');
-    expect(next.location).toBe('iron gates');
+    expect(next.location).toBe('meadow');
+  });
+
+  it('east then west returns to the original location', () => {
+    const fromGates = makeState({ location: 'iron gates' });
+    const east = handleMove(fromGates, 'EAST');
+    const west = handleMove(east, 'WEST');
+    expect(west.location).toBe('iron gates');
   });
 
   it('shows items present in a new location', () => {

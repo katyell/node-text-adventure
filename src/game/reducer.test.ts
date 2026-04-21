@@ -78,7 +78,17 @@ describe('COMMAND — movement', () => {
     expect(runCommands(['N']).location).toBe('cafe');
     expect(runCommands(['N', 'S']).location).toBe('start');
     expect(runCommands(['E']).location).toBe('street');
-    expect(runCommands(['W']).location).toBe('street');
+    expect(runCommands(['W']).location).toBe('west street');
+  });
+
+  it('moving the same horizontal direction twice does not snap back to start', () => {
+    const westTwice = runCommands(['WEST', 'WEST']);
+    expect(westTwice.location).toBe('west street');
+    expect(lastOutput(westTwice)).toMatch(/can't go that way/i);
+
+    const eastTwice = runCommands(['EAST', 'EAST']);
+    expect(eastTwice.location).toBe('street');
+    expect(lastOutput(eastTwice)).toMatch(/can't go that way/i);
   });
 
   it('UP and DOWN say "can\'t go that way" (no such exits exist)', () => {
@@ -89,9 +99,14 @@ describe('COMMAND — movement', () => {
   });
 
   it('locked iron gates block movement south without the flag', () => {
-    const state = runCommands(['SOUTH']);
-    expect(state.location).toBe('start');
+    const state = runCommands(['SOUTH', 'SOUTH']);
+    expect(state.location).toBe('iron gates');
     expect(lastOutput(state)).toMatch(/iron gates are firmly locked/i);
+  });
+
+  it('moving east then west returns to one step south of start', () => {
+    const state = runCommands(['SOUTH', 'EAST', 'WEST']);
+    expect(state.location).toBe('iron gates');
   });
 });
 
