@@ -1,15 +1,16 @@
-/**
- * All item definitions.
- * Each item has: description, type, uses (map of targetItemId → result string).
- * types: 'clothing' | 'consumable' | 'readable' | 'human' | 'key' | 'component' | 'misc'
- */
-export const items = {
+import type { ItemDefinition } from '../types.js';
+
+export const items: Record<string, ItemDefinition> = {
   tshirt: {
-    description: "It's a faded green t-shirt that's starting to fray at the edges.",
+    description:
+      "It's a faded green t-shirt that's starting to fray at the edges.",
     type: 'clothing',
     uses: {
-      'coffee cup':
-        'You use the t-shirt to clean the coffee cup. It is now clean and ready to drink from.',
+      'coffee cup': {
+        text: 'You use the t-shirt to clean the coffee cup. It is now clean and ready to drink from.',
+        setFlag: 'coffeeCupClean',
+        repeatText: 'The coffee cup is already clean.',
+      },
     },
   },
   jeans: {
@@ -41,4 +42,4 @@ export const items = {
     type: 'human',
     uses: {},
   },
-}
+};
