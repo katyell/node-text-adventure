@@ -1,4 +1,6 @@
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -8,8 +10,6 @@ html,
 body,
 #root {
   height: 100%;
+  overflow: hidden;
   background: #000;
-  color: #00ff00;
-  font-family: 'VT323', 'Courier New', monospace;
-  font-size: 18px;
 }
